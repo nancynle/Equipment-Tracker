@@ -11,7 +11,7 @@
     "dev:server": "tsx watch server/index.ts",
     "dev:client": "vite",
     "build": "vite build",
-    "start": "node --import tsx/esm server/index.ts",
+    "start": "tsx server/index.ts",
     "preview": "vite preview"
   },
   "dependencies": {

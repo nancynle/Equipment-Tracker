@@ -38,13 +38,18 @@ app.use('/api', apiRouter);
 // Serve public folder (floor plan images, etc.)
 app.use(express.static(path.join(process.cwd(), 'public')));
 
-// Serve static files in production
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(process.cwd(), 'dist')));
-  app.get('*', (_req, res) => {
-    res.sendFile(path.join(process.cwd(), 'dist', 'index.html'));
+// Serve built frontend
+app.use(express.static(path.join(process.cwd(), 'dist')));
+
+// Fallback to index.html for client-side routing
+app.get('*', (_req, res) => {
+  const indexPath = path.join(process.cwd(), 'dist', 'index.html');
+  res.sendFile(indexPath, (err) => {
+    if (err) {
+      res.status(404).send('Not found');
+    }
   });
-}
+});
 
 // Connected users tracking
 const connectedUsers = new Map<string, { alias: string; displayName: string }>();
