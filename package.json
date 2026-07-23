@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Interactive building equipment tracking system with real-time collaboration",
   "private": true,
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "tsx watch server/index.ts",
