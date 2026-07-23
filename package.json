@@ -8,7 +8,7 @@
     "dev:server": "tsx watch server/index.ts",
     "dev:client": "vite",
     "build": "vite build",
-    "start": "tsx server/index.ts",
+    "start": "node --import tsx/esm server/index.ts",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -32,8 +32,8 @@
     "@types/uuid": "10.0.0",
     "@vitejs/plugin-react": "4.3.4",
     "concurrently": "9.1.2",
-    "tsx": "4.19.2",
-    "typescript": "5.7.3",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
     "vite": "6.0.7",
     "vite-plugin-pwa": "0.21.1",
     "workbox-precaching": "7.3.0",
