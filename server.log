@@ -1,0 +1,176 @@
+[Excel] Loaded existing workbook
+[Server] Equipment Tracker running on port 3001
+[Server] Excel file: /home/nancynle/.workspace/equipment-tracker/data/equipment.xlsx
+[WS] Client connected: OLZyrIny94BNwfAzAAAB
+[WS] User registered: current-user (1 total)
+[Version] Saved: equipment_2026-07-22T13-41-10-967Z_pre-import.xlsx
+[Version] Pruned old version: equipment_2026-07-21T16-53-10-258Z_position-change.xlsx
+[Import] Column 1: "Zone" → zone
+[Import] Column 2: "Location" → location
+[Import] Column 3: "Floor Level" → floorLevel
+[Import] Column 4: "Item Area" → itemArea
+[Import] Column 5: "ID #" → identificationNumber
+[Import] Column 6: "Jam Pole Qty" → jamPoleQty
+[Import] Column 7: "Jam Holder" → holder
+[Import] Column 8: "Condition" → condition
+[Import] Column 9: "Last Audit Date" → lastAuditDate
+[Import] Column 10: "Notes" → notes
+[Import] Column 11: "Column1" → (not matched)
+[Import] Mapped columns: {
+  '1': 'zone',
+  '2': 'location',
+  '3': 'floorLevel',
+  '4': 'itemArea',
+  '5': 'identificationNumber',
+  '6': 'jamPoleQty',
+  '7': 'holder',
+  '8': 'condition',
+  '9': 'lastAuditDate',
+  '10': 'notes'
+}
+[Import] Done: 190 imported, 0 skipped
+[WS] Client connected: GNS-WYPmOhOQRf-MAAAD
+[WS] User registered: current-user (2 total)
+[WS] Client connected: AMgIcr3XElSb3p6FAAAF
+[WS] User registered: current-user (3 total)
+[WS] Client disconnected: GNS-WYPmOhOQRf-MAAAD (2 remaining)
+[WS] Client disconnected: OLZyrIny94BNwfAzAAAB (1 remaining)
+[WS] Client disconnected: AMgIcr3XElSb3p6FAAAF (0 remaining)
+[WS] Client connected: tfVHMH6FYybDmTMiAAAH
+[WS] User registered: current-user (1 total)
+[WS] Client disconnected: tfVHMH6FYybDmTMiAAAH (0 remaining)
+[WS] Client connected: N61Q0wTeTVTGrWX3AAAJ
+[WS] User registered: current-user (1 total)
+[WS] Client connected: 8WiTQKNdfwvX3-ZaAAAL
+[WS] User registered: current-user (2 total)
+[WS] Client disconnected: 8WiTQKNdfwvX3-ZaAAAL (1 remaining)
+[WS] Client connected: -73LTJ9WhOG3LBCfAAAN
+[WS] User registered: current-user (2 total)
+[WS] Client disconnected: -73LTJ9WhOG3LBCfAAAN (1 remaining)
+[WS] Client connected: UsLfGnQ-LmIctiLjAAAP
+[WS] User registered: current-user (2 total)
+[WS] Client connected: aY0oFLUPjErxplAfAAAR
+[WS] User registered: current-user (3 total)
+[WS] Client disconnected: N61Q0wTeTVTGrWX3AAAJ (2 remaining)
+[WS] Client disconnected: UsLfGnQ-LmIctiLjAAAP (1 remaining)
+[WS] Client disconnected: aY0oFLUPjErxplAfAAAR (0 remaining)
+[WS] Client connected: rHtTDIsluVeqdupLAAAU
+[WS] User registered: current-user (1 total)
+[WS] Client disconnected: rHtTDIsluVeqdupLAAAU (0 remaining)
+[WS] Client connected: 1a7suH3t7PPjlJAPAAAW
+[WS] User registered: current-user (1 total)
+[WS] Client disconnected: 1a7suH3t7PPjlJAPAAAW (0 remaining)
+[WS] Client connected: CnL_liZjeIsgww_TAAAZ
+[WS] User registered: current-user (1 total)
+[WS] Client connected: ROGtWwT_PzCf10NBAAAb
+[WS] Client disconnected: ROGtWwT_PzCf10NBAAAb (1 remaining)
+[WS] Client connected: TDFS1ZXROTeTZaPoAAAe
+[WS] Client connected: KwM6DZ6KpjVoOOwWAAAf
+[WS] User registered: current-user (2 total)
+[WS] User registered: current-user (3 total)
+[WS] Client connected: y4ZyxmIHRInJVdKjAAAi
+[WS] User registered: current-user (4 total)
+[WS] Client disconnected: CnL_liZjeIsgww_TAAAZ (3 remaining)
+[WS] Client disconnected: TDFS1ZXROTeTZaPoAAAe (2 remaining)
+[WS] Client disconnected: y4ZyxmIHRInJVdKjAAAi (1 remaining)
+[WS] Client disconnected: KwM6DZ6KpjVoOOwWAAAf (0 remaining)
+[WS] Client connected: stP32FA8D1SRrxVYAAAm
+[WS] Client connected: PQkLikWexOFa9N6bAAAn
+[WS] User registered: current-user (1 total)
+[WS] User registered: current-user (2 total)
+[WS] Client disconnected: PQkLikWexOFa9N6bAAAn (1 remaining)
+[WS] Client disconnected: stP32FA8D1SRrxVYAAAm (0 remaining)
+[WS] Client connected: p8OcCZ1nNUA0KHJxAAAq
+[WS] Client connected: B7UrxaMEV7PRXH-XAAAr
+[WS] User registered: current-user (1 total)
+[WS] User registered: current-user (2 total)
+[WS] Client disconnected: p8OcCZ1nNUA0KHJxAAAq (1 remaining)
+[WS] Client disconnected: B7UrxaMEV7PRXH-XAAAr (0 remaining)
+[WS] Client connected: hO8SQVRB9suE7LEgAAAu
+[WS] User registered: current-user (1 total)
+[WS] Client connected: 62D6nJyr313YCcMCAAAw
+[WS] Client disconnected: 62D6nJyr313YCcMCAAAw (1 remaining)
+[WS] Client connected: wu6Z9aNCvF6r_qPnAAAy
+[WS] User registered: current-user (2 total)
+[WS] Client disconnected: wu6Z9aNCvF6r_qPnAAAy (1 remaining)
+[WS] Client disconnected: hO8SQVRB9suE7LEgAAAu (0 remaining)
+[WS] Client connected: Nk2XxNfprUSUf-hEAAA1
+[WS] User registered: current-user (1 total)
+[WS] Client connected: FSxlddKVfj_Jh5XpAAA3
+[WS] User registered: current-user (2 total)
+[WS] Client disconnected: Nk2XxNfprUSUf-hEAAA1 (1 remaining)
+[WS] Client disconnected: FSxlddKVfj_Jh5XpAAA3 (0 remaining)
+[WS] Client connected: lQ4IyUC1uA6qVa0HAAA6
+[WS] User registered: current-user (1 total)
+[WS] Client connected: OdO1AlQ--iwKNA46AAA9
+[WS] User registered: current-user (2 total)
+[WS] Client disconnected: lQ4IyUC1uA6qVa0HAAA6 (1 remaining)
+[WS] Client disconnected: OdO1AlQ--iwKNA46AAA9 (0 remaining)
+[WS] Client connected: wE1fAT_7CNgijHW0AAA_
+[WS] User registered: current-user (1 total)
+[WS] Client connected: shBTox-PhseydQJxAABB
+[WS] User registered: current-user (2 total)
+[WS] Client disconnected: shBTox-PhseydQJxAABB (1 remaining)
+[WS] Client connected: 0p3vQ2KRSkkepjPgAABE
+[WS] User registered: current-user (2 total)
+[WS] Client disconnected: 0p3vQ2KRSkkepjPgAABE (1 remaining)
+[WS] Client disconnected: wE1fAT_7CNgijHW0AAA_ (0 remaining)
+[WS] Client connected: BCf-AEUviwRU0VjJAABG
+[WS] User registered: current-user (1 total)
+[WS] Client disconnected: BCf-AEUviwRU0VjJAABG (0 remaining)
+[WS] Client connected: h7E6IerOquDmdrZpAABJ
+[WS] User registered: current-user (1 total)
+[WS] Client connected: PsqIj7F7iJnAWhD5AABL
+[WS] User registered: current-user (2 total)
+[WS] Client disconnected: PsqIj7F7iJnAWhD5AABL (1 remaining)
+[WS] Client disconnected: h7E6IerOquDmdrZpAABJ (0 remaining)
+[WS] Client connected: DVX_zD2zbnOJB3_8AABN
+[WS] User registered: current-user (1 total)
+[WS] Client disconnected: DVX_zD2zbnOJB3_8AABN (0 remaining)
+[WS] Client connected: O_t0UvXUj36ZwGWFAABQ
+[WS] User registered: current-user (1 total)
+[WS] Client disconnected: O_t0UvXUj36ZwGWFAABQ (0 remaining)
+[WS] Client connected: vqe-WDS8ab6G49X3AABV
+[WS] User registered: current-user (1 total)
+[WS] Client connected: ZCq-58ORK20FpPhtAABX
+[WS] User registered: current-user (2 total)
+[WS] Client disconnected: vqe-WDS8ab6G49X3AABV (1 remaining)
+[WS] Client connected: GBEtH8yO1dsTqxqvAABZ
+[WS] User registered: current-user (2 total)
+[WS] Client disconnected: ZCq-58ORK20FpPhtAABX (1 remaining)
+[Version] Saved: equipment_2026-07-22T21-57-26-019Z_pre-import.xlsx
+[Version] Pruned old version: equipment_2026-07-21T16-53-10-278Z_position-change.xlsx
+[Import] Column 1: "Zone" → zone
+[Import] Column 2: "Location" → location
+[Import] Column 3: "Floor Level" → floorLevel
+[Import] Column 4: "Item Area" → itemArea
+[Import] Column 5: "ID #" → identificationNumber
+[Import] Column 6: "Jam Pole Qty" → jamPoleQty
+[Import] Column 7: "Jam Holder" → holder
+[Import] Column 8: "Condition" → condition
+[Import] Column 9: "Last Audit Date" → lastAuditDate
+[Import] Column 10: "Notes" → notes
+[Import] Column 11: "Column1" → (not matched)
+[Import] Mapped columns: {
+  '1': 'zone',
+  '2': 'location',
+  '3': 'floorLevel',
+  '4': 'itemArea',
+  '5': 'identificationNumber',
+  '6': 'jamPoleQty',
+  '7': 'holder',
+  '8': 'condition',
+  '9': 'lastAuditDate',
+  '10': 'notes'
+}
+[Import] Done: 190 imported, 0 skipped
+[WS] Client disconnected: GBEtH8yO1dsTqxqvAABZ (0 remaining)
+[WS] Client connected: afsXhmCoNf5KLix8AABb
+[WS] User registered: current-user (1 total)
+[WS] Client disconnected: afsXhmCoNf5KLix8AABb (0 remaining)
+[WS] Client connected: NFiG5mKDTQZglbaKAABd
+[WS] User registered: current-user (1 total)
+[WS] Client disconnected: NFiG5mKDTQZglbaKAABd (0 remaining)
+[WS] Client connected: bxzm0odDyscSOR45AABf
+[WS] User registered: current-user (1 total)
+[WS] Client disconnected: bxzm0odDyscSOR45AABf (0 remaining)
