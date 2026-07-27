@@ -15,16 +15,25 @@ export function useOffline() {
   useEffect(() => {
     const handleOnline = () => {
       setIsOnline(true);
-      flushQueue();
+      // Don't flush old queue on reconnect — server data is source of truth
+      // Only new changes made while offline should be queued
+      const queue = getQueue();
+      if (queue.length > 0) {
+        console.log(`[Offline] Clearing stale queue (${queue.length} items) — server is source of truth`);
+        saveQueue([]);
+      }
     };
     const handleOffline = () => setIsOnline(false);
 
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
-    // Check for pending changes on mount
+    // Clear any stale queue on mount — server data takes priority
     const queue = getQueue();
-    setPendingChanges(queue.length);
+    if (queue.length > 0) {
+      console.log(`[Offline] Clearing stale queue on mount (${queue.length} items)`);
+      saveQueue([]);
+    }
 
     return () => {
       window.removeEventListener('online', handleOnline);

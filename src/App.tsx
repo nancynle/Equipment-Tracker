@@ -233,7 +233,7 @@ export default function App() {
       {/* Header */}
       <header className="app-header">
         <div className="header-left">
-          <h1>🏗️ Equipment Tracker</h1>
+          <h1>🏗️ Equipment Tracker v2</h1>
           <span className="subtitle">Jam Poles · Ladders · Cottermans</span>
         </div>
         <div className="header-center">
