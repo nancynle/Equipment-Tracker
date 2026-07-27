@@ -81,8 +81,12 @@ export class ExcelSync {
     try {
       await fs.access(this.filePath);
       await this.workbook.xlsx.readFile(this.filePath);
-      console.log('[Excel] Loaded existing workbook');
-    } catch {
+      // Verify the file has data
+      const sheet = this.workbook.getWorksheet(EQUIPMENT_SHEET);
+      const rowCount = sheet ? sheet.rowCount : 0;
+      console.log(`[Excel] Loaded existing workbook: ${this.filePath} (${rowCount} rows in Equipment sheet)`);
+    } catch (err) {
+      console.log(`[Excel] Could not load file (${err}), creating new workbook`);
       this.createDefaultSheets();
       await this.save();
       console.log('[Excel] Created new workbook');
