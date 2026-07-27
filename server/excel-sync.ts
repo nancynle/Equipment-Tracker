@@ -308,6 +308,13 @@ export class ExcelSync {
 
     this.reassignColumnKeys(sheet, EQUIPMENT_COLUMNS);
 
+    // Load fallback positions from embedded data
+    let fallbackPositions: Record<string, { mapX: number; mapY: number }> = {};
+    try {
+      const posData = require('./positions.json');
+      fallbackPositions = posData;
+    } catch {}
+
     const equipment: Equipment[] = [];
     sheet.eachRow((row, rowNumber) => {
       if (rowNumber === 1) return;
@@ -336,12 +343,23 @@ export class ExcelSync {
         mapX: (() => {
           const v = row.getCell('mapX').value;
           const n = Number(v);
-          return isNaN(n) || v === null || v === '' ? 50 : n;
+          const result = isNaN(n) || v === null || v === '' ? 50 : n;
+          // If still at center, try fallback positions
+          if (result === 50) {
+            const key = (String(row.getCell('zone').value || '') + '|' + String(row.getCell('location').value || '')).toLowerCase();
+            if (fallbackPositions[key]) return fallbackPositions[key].mapX;
+          }
+          return result;
         })(),
         mapY: (() => {
           const v = row.getCell('mapY').value;
           const n = Number(v);
-          return isNaN(n) || v === null || v === '' ? 50 : n;
+          const result = isNaN(n) || v === null || v === '' ? 50 : n;
+          if (result === 50) {
+            const key = (String(row.getCell('zone').value || '') + '|' + String(row.getCell('location').value || '')).toLowerCase();
+            if (fallbackPositions[key]) return fallbackPositions[key].mapY;
+          }
+          return result;
         })(),
       };
 
