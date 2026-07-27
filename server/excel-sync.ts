@@ -141,8 +141,8 @@ export class ExcelSync {
     const existingEquipment = await this.getAllEquipment();
     const positionMap = new Map<string, { mapX: number; mapY: number }>();
     for (const eq of existingEquipment) {
-      // Key by zone+location+id to match items across imports
-      const key = `${eq.zone}|${eq.location}|${eq.identificationNumber}`.toLowerCase();
+      // Key by zone+location to match items across imports (case-insensitive)
+      const key = `${eq.zone}|${eq.location}`.toLowerCase();
       if (eq.mapX !== 50 || eq.mapY !== 50) {
         // Only save positions that have been moved from default center
         positionMap.set(key, { mapX: eq.mapX, mapY: eq.mapY });
@@ -266,7 +266,7 @@ export class ExcelSync {
         };
 
         // Restore saved position if this item was previously positioned
-        const posKey = `${fullItem.zone}|${fullItem.location}|${fullItem.identificationNumber}`.toLowerCase();
+        const posKey = `${fullItem.zone}|${fullItem.location}`.toLowerCase();
         const savedPos = positionMap.get(posKey);
         if (savedPos) {
           fullItem.mapX = savedPos.mapX;

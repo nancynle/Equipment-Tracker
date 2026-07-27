@@ -209,6 +209,26 @@ export function EquipmentMap({ equipment, issues, selectedEquipment, onSelect, o
           style={{ display: 'none' }}
         />
         <span className="map-count">{filteredEquipment.length} visible</span>
+        <button
+          className="btn btn-sm btn-save-positions"
+          onClick={async () => {
+            const positions = equipment.map(e => ({ id: e.id, mapX: e.mapX, mapY: e.mapY }));
+            try {
+              const res = await fetch('/api/equipment/bulk-positions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(positions),
+              });
+              const result = await res.json();
+              alert(`✅ Positions saved! ${result.updated} dots updated.`);
+            } catch (err) {
+              alert('❌ Failed to save positions');
+            }
+          }}
+          title="Save all dot positions to server"
+        >
+          💾 Save Positions
+        </button>
       </div>
 
       {/* Map viewport */}

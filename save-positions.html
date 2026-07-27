@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head><title>Save Positions</title></head>
+<body style="font-family: sans-serif; padding: 40px; text-align: center;">
+<h1>💾 Save All Dot Positions</h1>
+<p>Click the button to save all your positioned dots permanently.</p>
+<button id="save" style="font-size: 24px; padding: 20px 40px; cursor: pointer; background: #ff9900; border: none; border-radius: 8px; color: #232f3e; font-weight: bold;">
+  CLICK TO SAVE ALL POSITIONS
+</button>
+<pre id="status" style="margin-top: 20px; text-align: left; background: #f5f5f5; padding: 20px; border-radius: 8px;"></pre>
+<script>
+document.getElementById('save').onclick = async function() {
+  const status = document.getElementById('status');
+  status.textContent = 'Reading offline queue...\n';
+  
+  const queue = JSON.parse(localStorage.getItem('equipment-tracker-offline-queue') || '[]');
+  status.textContent += 'Queue items: ' + queue.length + '\n';
+  
+  const positions = {};
+  for (const item of queue) {
+    if (item.type === 'equipment:update' && item.data && item.data.id) {
+      positions[item.data.id] = { id: item.data.id, mapX: item.data.mapX, mapY: item.data.mapY };
+    }
+  }
+  
+  const posArray = Object.values(positions);
+  status.textContent += 'Unique positions to save: ' + posArray.length + '\n';
+  status.textContent += 'Sending to server...\n';
+  
+  try {
+    const res = await fetch('/api/equipment/bulk-positions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(posArray),
+    });
+    const text = await res.text();
+    status.textContent += 'Response: ' + text + '\n';
+    const result = JSON.parse(text);
+    status.textContent += '✅ SUCCESS! ' + result.updated + ' positions saved.\n';
+    localStorage.removeItem('equipment-tracker-offline-queue');
+    status.textContent += 'Queue cleared. ✓\n';
+    status.textContent += '\nDone! Your dots are permanently saved.';
+  } catch(err) {
+    status.textContent += '❌ Error: ' + err.message + '\n';
+  }
+};
+</script>
+</body>
+</html>

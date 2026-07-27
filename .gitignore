@@ -3,3 +3,5 @@ dist/
 *.log
 data/versions/
 data/uploads/
+server.log
+vite.log

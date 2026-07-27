@@ -180,6 +180,37 @@ apiRouter.get('/sync/status', (_req, res) => {
   });
 });
 
+// POST /api/equipment/bulk-positions - save all positions at once
+apiRouter.post('/equipment/bulk-positions', async (req, res) => {
+  try {
+    const excelSync: ExcelSync = req.app.locals.excelSync;
+    const positions: Array<{ id: string; mapX: number; mapY: number }> = req.body;
+    
+    if (!Array.isArray(positions)) {
+      return res.status(400).json({ error: 'Expected array of positions' });
+    }
+
+    const allEquipment = await excelSync.getAllEquipment();
+    let updated = 0;
+
+    for (const pos of positions) {
+      const item = allEquipment.find(e => e.id === pos.id);
+      if (item && (item.mapX !== pos.mapX || item.mapY !== pos.mapY)) {
+        item.mapX = pos.mapX;
+        item.mapY = pos.mapY;
+        await excelSync.updateEquipment(item);
+        updated++;
+      }
+    }
+
+    console.log(`[API] Bulk positions saved: ${updated} items updated`);
+    res.json({ success: true, updated });
+  } catch (err) {
+    console.error('[API] Error saving bulk positions:', err);
+    res.status(500).json({ error: 'Failed to save positions' });
+  }
+});
+
 // POST /api/sync/refresh - force re-read from Excel
 apiRouter.post('/sync/refresh', async (req, res) => {
   try {
