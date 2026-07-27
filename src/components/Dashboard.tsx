@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import type { Equipment, IssueReport, ChangeLogEntry } from '../types';
+import { TrendChart } from './TrendChart';
 
 interface Props {
   equipment: Equipment[];
@@ -427,6 +428,72 @@ export function Dashboard({ equipment, issues }: Props) {
           {recentChanges.length === 0 ? (
             <p className="dash-empty">No change history yet. Insights will appear as you use the system over time.</p>
           ) : (
+            <>
+            {/* Trend Line Charts */}
+            <div className="trend-charts-grid">
+              <TrendChart
+                title="Issues Reported"
+                color="#f44336"
+                data={(() => {
+                  // Group issues by week/day depending on timeframe
+                  const bucketDays = parseInt(timeframe) <= 30 ? 1 : 7;
+                  const buckets: Record<string, number> = {};
+                  const now = new Date();
+                  for (let i = parseInt(timeframe); i >= 0; i -= bucketDays) {
+                    const d = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+                    const key = `${d.getMonth() + 1}/${d.getDate()}`;
+                    buckets[key] = 0;
+                  }
+                  recentChanges.filter(c => c.changeType === 'issue_reported').forEach(c => {
+                    const d = new Date(c.changedAt);
+                    const key = `${d.getMonth() + 1}/${d.getDate()}`;
+                    if (buckets[key] !== undefined) buckets[key]++;
+                  });
+                  return Object.entries(buckets).map(([label, value]) => ({ label, value }));
+                })()}
+              />
+              <TrendChart
+                title="Condition Changes"
+                color="#ff9800"
+                data={(() => {
+                  const bucketDays = parseInt(timeframe) <= 30 ? 1 : 7;
+                  const buckets: Record<string, number> = {};
+                  const now = new Date();
+                  for (let i = parseInt(timeframe); i >= 0; i -= bucketDays) {
+                    const d = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+                    const key = `${d.getMonth() + 1}/${d.getDate()}`;
+                    buckets[key] = 0;
+                  }
+                  recentChanges.filter(c => c.changeType === 'condition_change').forEach(c => {
+                    const d = new Date(c.changedAt);
+                    const key = `${d.getMonth() + 1}/${d.getDate()}`;
+                    if (buckets[key] !== undefined) buckets[key]++;
+                  });
+                  return Object.entries(buckets).map(([label, value]) => ({ label, value }));
+                })()}
+              />
+              <TrendChart
+                title="All Activity"
+                color="#2196f3"
+                data={(() => {
+                  const bucketDays = parseInt(timeframe) <= 30 ? 1 : 7;
+                  const buckets: Record<string, number> = {};
+                  const now = new Date();
+                  for (let i = parseInt(timeframe); i >= 0; i -= bucketDays) {
+                    const d = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+                    const key = `${d.getMonth() + 1}/${d.getDate()}`;
+                    buckets[key] = 0;
+                  }
+                  recentChanges.forEach(c => {
+                    const d = new Date(c.changedAt);
+                    const key = `${d.getMonth() + 1}/${d.getDate()}`;
+                    if (buckets[key] !== undefined) buckets[key]++;
+                  });
+                  return Object.entries(buckets).map(([label, value]) => ({ label, value }));
+                })()}
+              />
+            </div>
+
             <div className="insights-grid">
               <div className="insight-card">
                 <div className="insight-value">{conditionDamages.length}</div>
@@ -452,7 +519,6 @@ export function Dashboard({ equipment, issues }: Props) {
                 <div className="insight-detail">Average activity level</div>
               </div>
             </div>
-          )}
 
           {conditionDamages.length > 0 && (
             <div className="insights-breakdown">
@@ -469,6 +535,8 @@ export function Dashboard({ equipment, issues }: Props) {
               </div>
             </div>
           )}
+          </>
+        )}
         </div>
 
         {/* Quick Links */}
