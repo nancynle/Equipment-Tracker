@@ -1,4 +1,0 @@
-# Keep this directory in git but ignore contents except .gitkeep
-*
-!.gitkeep
-!equipment.xlsx
