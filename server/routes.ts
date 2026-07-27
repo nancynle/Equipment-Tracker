@@ -34,6 +34,8 @@ apiRouter.get('/equipment', async (req, res) => {
   try {
     const excelSync: ExcelSync = req.app.locals.excelSync;
     const equipment = await excelSync.getAllEquipment();
+    const positioned = equipment.filter(e => e.mapX !== 50 || e.mapY !== 50).length;
+    console.log(`[API] GET /equipment: ${equipment.length} items, ${positioned} positioned`);
     res.json(equipment);
   } catch (err) {
     console.error('[API] Error fetching equipment:', err);

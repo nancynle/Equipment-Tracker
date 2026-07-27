@@ -333,8 +333,16 @@ export class ExcelSync {
         mountedOn: String(row.getCell('mountedOn').value || '') || undefined,
         lastModifiedBy: String(row.getCell('lastModifiedBy').value || ''),
         photoLink: String(row.getCell('photoLink').value || '') || undefined,
-        mapX: Number(row.getCell('mapX').value) || 50,
-        mapY: Number(row.getCell('mapY').value) || 50,
+        mapX: (() => {
+          const v = row.getCell('mapX').value;
+          const n = Number(v);
+          return isNaN(n) || v === null || v === '' ? 50 : n;
+        })(),
+        mapY: (() => {
+          const v = row.getCell('mapY').value;
+          const n = Number(v);
+          return isNaN(n) || v === null || v === '' ? 50 : n;
+        })(),
       };
 
       if (item.id || item.identificationNumber) {
