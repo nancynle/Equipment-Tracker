@@ -544,12 +544,20 @@ export function Dashboard({ equipment, issues }: Props) {
           <h3>Quick Actions</h3>
           <div className="quick-links">
             <a
-              href="https://forms.office.com/r/Ai16vzJFLb"
+              href="https://forms.cloud.microsoft/r/5czf7rUWmM"
               target="_blank"
               rel="noopener noreferrer"
               className="quick-link-btn"
             >
-              📝 Report Issue (MS Form)
+              📝 Report Issue (English)
+            </a>
+            <a
+              href="https://forms.cloud.microsoft/r/sPb4nyH7Fr"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="quick-link-btn"
+            >
+              📝 Reportar Problema (Español)
             </a>
             <a
               href="https://t.corp.amazon.com/create"

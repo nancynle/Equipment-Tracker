@@ -9,7 +9,8 @@ interface Props {
 }
 
 // TODO: Replace these with your actual links
-const MS_FORM_BASE_URL = 'https://forms.office.com/r/Ai16vzJFLb';
+const MS_FORM_BASE_URL = 'https://forms.cloud.microsoft/r/5czf7rUWmM';
+const MS_FORM_SPANISH_URL = 'https://forms.cloud.microsoft/r/sPb4nyH7Fr';
 const RME_TICKET_URL = 'https://t.corp.amazon.com/create';
 
 export function IssueReportModal({ equipment, onSubmit, onClose }: Props) {
@@ -75,7 +76,15 @@ export function IssueReportModal({ equipment, onSubmit, onClose }: Props) {
             rel="noopener noreferrer"
             className="quick-link-btn"
           >
-            📝 Submit via MS Form
+            📝 Report Issue (English)
+          </a>
+          <a
+            href={MS_FORM_SPANISH_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="quick-link-btn"
+          >
+            📝 Reportar Problema (Español)
           </a>
           <a
             href={getRmeTicketUrl()}
