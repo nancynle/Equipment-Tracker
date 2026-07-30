@@ -544,7 +544,7 @@ export function Dashboard({ equipment, issues }: Props) {
           <h3>Quick Actions</h3>
           <div className="quick-links">
             <a
-              href="https://forms.cloud.microsoft/r/5czf7rUWmM"
+              href="https://forms.cloud.microsoft/r/Ai16vzJFLb"
               target="_blank"
               rel="noopener noreferrer"
               className="quick-link-btn"
