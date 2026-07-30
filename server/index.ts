@@ -144,9 +144,31 @@ io.on('connection', (socket) => {
   // Equipment delete
   socket.on('equipment:delete', async (id: string) => {
     try {
+      // Get equipment info before deleting (for the log)
+      const allEquip = await excelSync.getAllEquipment();
+      const item = allEquip.find(e => e.id === id);
+
+      // Save a version before deletion
+      await versionManager.saveVersion('pre-delete');
+
       await excelSync.deleteEquipment(id);
       socket.broadcast.emit('equipment:delete', id);
       console.log(`[WS] Equipment deleted: ${id}`);
+
+      // Log deletion
+      if (item) {
+        await excelSync.addChangeLogEntry({
+          id: crypto.randomUUID(),
+          equipmentId: id,
+          equipmentIdNumber: item.identificationNumber || '',
+          field: 'equipment',
+          oldValue: `${item.type} - ${item.zone} - ${item.location}`,
+          newValue: 'DELETED',
+          changedBy: 'user',
+          changedAt: new Date().toISOString(),
+          changeType: 'deleted',
+        });
+      }
     } catch (err) {
       socket.emit('error', { message: 'Failed to delete equipment' });
       console.error('[WS] Delete error:', err);
