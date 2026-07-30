@@ -15,6 +15,10 @@ export default function App() {
   const [equipment, setEquipment] = useState<Equipment[]>([]);
   const [issues, setIssues] = useState<IssueReport[]>([]);
   const [viewMode, setViewMode] = useState<ViewMode>('split');
+  const [username, setUsername] = useState<string>(() => {
+    return localStorage.getItem('equipment-tracker-username') || '';
+  });
+  const [showUsernamePrompt, setShowUsernamePrompt] = useState(!localStorage.getItem('equipment-tracker-username'));
   const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(null);
   const [showIssueModal, setShowIssueModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -105,7 +109,7 @@ export default function App() {
     (updated: Equipment) => {
       const timestamped: Equipment = {
         ...updated,
-        lastModifiedBy: 'current-user', // TODO: replace with Midway user
+        lastModifiedBy: username || 'unknown',
       };
 
       // Optimistic update
@@ -367,6 +371,7 @@ export default function App() {
       {showIssueModal && selectedEquipment && (
         <IssueReportModal
           equipment={selectedEquipment}
+          username={username}
           onSubmit={handleReportIssue}
           onClose={() => setShowIssueModal(false)}
         />
@@ -375,9 +380,39 @@ export default function App() {
       {showAddModal && (
         <AddEquipmentModal
           equipment={equipment}
+          username={username}
           onSubmit={handleCreateEquipment}
           onClose={() => setShowAddModal(false)}
         />
+      )}
+
+      {/* Username prompt */}
+      {showUsernamePrompt && (
+        <div className="modal-overlay" role="dialog" aria-modal="true">
+          <div className="modal" style={{ maxWidth: '380px', textAlign: 'center' }}>
+            <h2>👋 Welcome</h2>
+            <p style={{ color: '#666', marginBottom: '16px' }}>Enter your Amazon username so we can track who makes changes.</p>
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              if (username.trim()) {
+                localStorage.setItem('equipment-tracker-username', username.trim());
+                setShowUsernamePrompt(false);
+              }
+            }}>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="e.g., nancynle"
+                style={{ width: '100%', padding: '10px', fontSize: '1rem', border: '1px solid #ddd', borderRadius: '6px', marginBottom: '12px' }}
+                autoFocus
+              />
+              <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '10px' }}>
+                Continue
+              </button>
+            </form>
+          </div>
+        </div>
       )}
     </div>
   );

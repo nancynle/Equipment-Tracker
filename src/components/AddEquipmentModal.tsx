@@ -4,11 +4,12 @@ import type { Equipment, EquipmentType, EquipmentCondition } from '../types';
 
 interface Props {
   equipment: Equipment[];
+  username: string;
   onSubmit: (equipment: Equipment) => void;
   onClose: () => void;
 }
 
-export function AddEquipmentModal({ equipment, onSubmit, onClose }: Props) {
+export function AddEquipmentModal({ equipment, username, onSubmit, onClose }: Props) {
   const [type, setType] = useState<EquipmentType>('jam_pole');
   const [zone, setZone] = useState('');
   const [location, setLocation] = useState('');
@@ -42,7 +43,7 @@ export function AddEquipmentModal({ equipment, onSubmit, onClose }: Props) {
       lastAuditDate,
       notes: notes.trim() || undefined,
       mountedOn: mountedOn || undefined,
-      lastModifiedBy: 'current-user',
+      lastModifiedBy: username || 'unknown',
       mapX: 50,
       mapY: 50,
     };

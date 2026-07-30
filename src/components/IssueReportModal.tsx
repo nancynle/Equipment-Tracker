@@ -4,6 +4,7 @@ import type { Equipment, IssueReport } from '../types';
 
 interface Props {
   equipment: Equipment;
+  username: string;
   onSubmit: (issue: IssueReport) => void;
   onClose: () => void;
 }
@@ -13,7 +14,7 @@ const MS_FORM_BASE_URL = 'https://forms.cloud.microsoft/r/Ai16vzJFLb';
 const MS_FORM_SPANISH_URL = 'https://forms.cloud.microsoft/r/sPb4nyH7Fr';
 const RME_TICKET_URL = 'https://t.corp.amazon.com/create';
 
-export function IssueReportModal({ equipment, onSubmit, onClose }: Props) {
+export function IssueReportModal({ equipment, username, onSubmit, onClose }: Props) {
   const [severity, setSeverity] = useState<IssueReport['severity']>('medium');
   const [description, setDescription] = useState('');
   const [assignedTo, setAssignedTo] = useState('');
@@ -49,7 +50,7 @@ export function IssueReportModal({ equipment, onSubmit, onClose }: Props) {
     const issue: IssueReport = {
       id: uuidv4(),
       equipmentId: equipment.id,
-      reportedBy: 'current-user',
+      reportedBy: username || 'unknown',
       reportedAt: new Date().toISOString(),
       severity,
       description: description.trim(),
