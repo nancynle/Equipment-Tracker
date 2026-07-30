@@ -10,8 +10,7 @@ interface Props {
 }
 
 // TODO: Replace these with your actual links
-const MS_FORM_BASE_URL = 'https://forms.cloud.microsoft/r/Ai16vzJFLb';
-const MS_FORM_SPANISH_URL = 'https://forms.cloud.microsoft/r/sPb4nyH7Fr';
+const SAFETY_REPORT_URL = 'https://atoz.amazon.work/safety_observations';
 const RME_TICKET_URL = 'https://t.corp.amazon.com/create';
 
 export function IssueReportModal({ equipment, username, onSubmit, onClose }: Props) {
@@ -20,17 +19,6 @@ export function IssueReportModal({ equipment, username, onSubmit, onClose }: Pro
   const [assignedTo, setAssignedTo] = useState('');
 
   // Build MS Form URL with pre-filled fields
-  const getMsFormUrl = () => {
-    const params = new URLSearchParams({
-      'entry.1': equipment.identificationNumber,
-      'entry.2': equipment.zone || '',
-      'entry.3': equipment.zone || '',
-      'entry.4': equipment.type.replace('_', ' '),
-      'entry.5': equipment.floorLevel || '',
-    });
-    return `${MS_FORM_BASE_URL}?${params.toString()}`;
-  };
-
   // Build RME ticket URL with pre-filled data
   const getRmeTicketUrl = () => {
     const params = new URLSearchParams({
@@ -72,20 +60,12 @@ export function IssueReportModal({ equipment, username, onSubmit, onClose }: Pro
         {/* Quick action links */}
         <div className="issue-quick-links">
           <a
-            href={getMsFormUrl()}
+            href={SAFETY_REPORT_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="quick-link-btn"
           >
-            📝 Report Issue (English)
-          </a>
-          <a
-            href={MS_FORM_SPANISH_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="quick-link-btn"
-          >
-            📝 Reportar Problema (Español)
+            📝 Report Safety Observation (AtoZ)
           </a>
           <a
             href={getRmeTicketUrl()}

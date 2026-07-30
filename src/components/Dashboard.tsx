@@ -557,20 +557,12 @@ export function Dashboard({ equipment, issues, onUpdateIssue }: Props) {
           <h3>Quick Actions</h3>
           <div className="quick-links">
             <a
-              href="https://forms.cloud.microsoft/r/Ai16vzJFLb"
+              href="https://atoz.amazon.work/safety_observations"
               target="_blank"
               rel="noopener noreferrer"
               className="quick-link-btn"
             >
-              📝 Report Issue (English)
-            </a>
-            <a
-              href="https://forms.cloud.microsoft/r/sPb4nyH7Fr"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="quick-link-btn"
-            >
-              📝 Reportar Problema (Español)
+              📝 Report Safety Observation (AtoZ)
             </a>
             <a
               href="https://t.corp.amazon.com/create"

@@ -122,6 +122,19 @@ io.on('connection', (socket) => {
       await excelSync.addEquipment(equipment);
       socket.broadcast.emit('equipment:create', equipment);
       console.log(`[WS] Equipment created: ${equipment.id}`);
+
+      // Log to change log
+      await excelSync.addChangeLogEntry({
+        id: crypto.randomUUID(),
+        equipmentId: equipment.id,
+        equipmentIdNumber: equipment.identificationNumber || '',
+        field: 'equipment',
+        oldValue: '',
+        newValue: `${equipment.type} - ${equipment.zone} - ${equipment.location}`,
+        changedBy: equipment.lastModifiedBy || 'unknown',
+        changedAt: new Date().toISOString(),
+        changeType: 'created',
+      });
     } catch (err) {
       socket.emit('error', { message: 'Failed to create equipment' });
       console.error('[WS] Create error:', err);
