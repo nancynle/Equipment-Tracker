@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import type { Equipment, IssueReport, ChangeLogEntry } from '../types';
 import { TrendChart } from './TrendChart';
+import { IssuePanel } from './IssuePanel';
+import { ActivityLog } from './ActivityLog';
 
 interface Props {
   equipment: Equipment[];
   issues: IssueReport[];
+  onUpdateIssue: (issue: IssueReport) => void;
 }
 
 // Configurable thresholds
 const _RESERVED = 0; // placeholder
 
-export function Dashboard({ equipment, issues }: Props) {
+export function Dashboard({ equipment, issues, onUpdateIssue }: Props) {
   const [changelog, setChangelog] = useState<ChangeLogEntry[]>([]);
   const [timeframe, setTimeframe] = useState<'7' | '30' | '90' | '180' | '365'>('90');
 
@@ -537,6 +540,16 @@ export function Dashboard({ equipment, issues }: Props) {
           )}
           </>
         )}
+        </div>
+
+        {/* Issue Management */}
+        <div className="dash-section">
+          <IssuePanel issues={issues} equipment={equipment} onUpdateIssue={onUpdateIssue} />
+        </div>
+
+        {/* Activity Log */}
+        <div className="dash-section">
+          <ActivityLog />
         </div>
 
         {/* Quick Links */}

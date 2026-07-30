@@ -172,6 +172,19 @@ export default function App() {
     [equipment, handleUpdateEquipment]
   );
 
+  const handleUpdateIssue = useCallback(
+    (issue: IssueReport) => {
+      setIssues((prev) => prev.map((i) => i.id === issue.id ? issue : i));
+
+      if (isOnline && socket?.connected) {
+        socket.emit('issue:update', issue);
+      } else {
+        queueChange({ type: 'issue:update', data: issue });
+      }
+    },
+    [isOnline, socket, queueChange]
+  );
+
   const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -310,7 +323,7 @@ export default function App() {
       <main className={`main-content view-${viewMode}`}>
         {viewMode === 'dashboard' && (
           <section className="dashboard-panel">
-            <Dashboard equipment={equipment} issues={issues} />
+            <Dashboard equipment={equipment} issues={issues} onUpdateIssue={handleUpdateIssue} />
           </section>
         )}
         {(viewMode === 'table' || viewMode === 'split') && (

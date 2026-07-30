@@ -1168,6 +1168,41 @@ tr.overdue {
 .quick-link-rme:hover { background: #bf360c; }
 .dash-hint { font-size: 0.7rem; color: var(--text-secondary); margin-top: 10px; font-style: italic; }
 
+/* Issue Panel */
+.issue-panel h3 { font-size: 0.95rem; margin-bottom: 10px; }
+.issue-list { display: flex; flex-direction: column; gap: 8px; max-height: 350px; overflow-y: auto; }
+.issue-item { padding: 10px; border-radius: 6px; background: var(--bg); border-left: 3px solid var(--border); }
+.issue-item.severity-critical { border-left-color: #c62828; }
+.issue-item.severity-high { border-left-color: #e65100; }
+.issue-item.severity-medium { border-left-color: #ff9800; }
+.issue-item.severity-low { border-left-color: #90a4ae; }
+.issue-item.issue-resolved { border-left-color: #4caf50; opacity: 0.7; }
+.issue-item-header { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; font-size: 0.8rem; }
+.issue-severity-label { font-size: 0.65rem; background: #eee; padding: 1px 6px; border-radius: 8px; text-transform: capitalize; }
+.issue-date { font-size: 0.65rem; color: var(--text-secondary); margin-left: auto; }
+.issue-item-body { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 6px; }
+.issue-item-body p { margin: 0 0 3px 0; }
+.issue-item-location { font-size: 0.7rem; color: var(--text-secondary); }
+.issue-item-assigned { font-size: 0.7rem; color: var(--primary); margin-left: 8px; }
+.issue-item-actions { display: flex; gap: 6px; }
+.issue-list-resolved { opacity: 0.8; }
+.sev-resolved { background: #4caf50; }
+
+/* Activity Log */
+.activity-log h3 { font-size: 0.95rem; }
+.activity-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.filter-dropdown-dark { padding: 4px 8px; border: 1px solid var(--border); border-radius: 4px; font-size: 0.75rem; }
+.activity-timeline { max-height: 400px; overflow-y: auto; }
+.activity-day { margin-bottom: 12px; }
+.activity-date { font-size: 0.75rem; font-weight: 700; color: var(--primary); padding: 4px 0; border-bottom: 1px solid var(--border); margin-bottom: 6px; }
+.activity-entries { display: flex; flex-direction: column; gap: 4px; }
+.activity-entry { display: flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; background: var(--bg); }
+.activity-type { font-size: 0.7rem; min-width: 80px; }
+.activity-equip { font-weight: 600; min-width: 60px; }
+.activity-detail { flex: 1; color: var(--text-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.activity-by { font-size: 0.65rem; color: var(--text-secondary); }
+.activity-time { font-size: 0.65rem; color: var(--text-secondary); min-width: 45px; text-align: right; }
+
 /* Stock Level Bars */
 .stock-circles {
   display: flex;
