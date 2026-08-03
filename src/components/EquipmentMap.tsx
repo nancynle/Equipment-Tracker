@@ -28,6 +28,7 @@ export function EquipmentMap({ equipment, issues, selectedEquipment, onSelect, o
   const [selectedFloor, setSelectedFloor] = useState('all');
   const [selectedZone, setSelectedZone] = useState('all');
   const [selectedType, setSelectedType] = useState('all');
+  const [selectedHighlight, setSelectedHighlight] = useState('none');
   const [viewOnly, setViewOnly] = useState(true);
 
   // Color customization (persisted in localStorage)
@@ -75,6 +76,19 @@ export function EquipmentMap({ equipment, issues, selectedEquipment, onSelect, o
 
   const hasOpenIssue = (equipId: string) =>
     issues.some((i) => i.equipmentId === equipId && i.status !== 'resolved');
+
+  // Highlight filter logic
+  const isHighlighted = (item: Equipment): boolean => {
+    if (selectedHighlight === 'none') return false;
+    switch (selectedHighlight) {
+      case 'missing_poles': return item.holder && item.jamPoleQty === 0;
+      case 'missing_holders': return !item.holder;
+      case 'damaged': return item.condition === 'bad' || item.condition === 'slight_bend';
+      case 'unavailable': return item.condition === 'unavailable';
+      default: return false;
+    }
+  };
+  const hasHighlightFilter = selectedHighlight !== 'none';
 
   // Marker drag (only when not in view-only mode)
   const handleMarkerDragStart = (id: string) => (e: React.MouseEvent) => {
@@ -182,10 +196,12 @@ export function EquipmentMap({ equipment, issues, selectedEquipment, onSelect, o
         selectedFloor={selectedFloor}
         selectedZone={selectedZone}
         selectedType={selectedType}
+        selectedHighlight={selectedHighlight}
         viewOnly={viewOnly}
         onFloorChange={setSelectedFloor}
         onZoneChange={setSelectedZone}
         onTypeChange={setSelectedType}
+        onHighlightChange={setSelectedHighlight}
         onViewOnlyChange={setViewOnly}
         colors={colors}
         onColorsChange={handleColorsChange}
@@ -271,6 +287,7 @@ export function EquipmentMap({ equipment, issues, selectedEquipment, onSelect, o
                 key={item.id}
                 className={`map-dot ${selectedEquipment?.id === item.id ? 'dot-selected' : ''} ${
                   highlightedIds.size > 0 ? (highlightedIds.has(item.id) ? 'dot-highlighted' : 'dot-dimmed') : ''
+                } ${hasHighlightFilter ? (isHighlighted(item) ? 'dot-highlighted' : 'dot-dimmed') : ''
                 } ${item.condition === 'bad' || item.condition === 'unavailable' ? 'dot-poor' : ''} ${hasOpenIssue(item.id) ? 'dot-has-issue' : ''}`}
                 style={{
                   left: `${item.mapX}%`,

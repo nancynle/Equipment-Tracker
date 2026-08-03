@@ -6,10 +6,12 @@ interface Props {
   selectedFloor: string;
   selectedZone: string;
   selectedType: string;
+  selectedHighlight: string;
   viewOnly: boolean;
   onFloorChange: (floor: string) => void;
   onZoneChange: (zone: string) => void;
   onTypeChange: (type: string) => void;
+  onHighlightChange: (highlight: string) => void;
   onViewOnlyChange: (viewOnly: boolean) => void;
   colors: Record<string, string>;
   onColorsChange: (colors: Record<string, string>) => void;
@@ -20,10 +22,12 @@ export function MapFilterBar({
   selectedFloor,
   selectedZone,
   selectedType,
+  selectedHighlight,
   viewOnly,
   onFloorChange,
   onZoneChange,
   onTypeChange,
+  onHighlightChange,
   onViewOnlyChange,
   colors,
   onColorsChange,
@@ -78,6 +82,23 @@ export function MapFilterBar({
           <option value="all">All</option>
           <option value="jam_pole">🔵 Jam Pole</option>
           <option value="cotterman">🟡 Cotterman</option>
+        </select>
+      </div>
+
+      {/* Highlight filter */}
+      <div className="filter-group">
+        <label className="filter-label" htmlFor="filter-highlight">HIGHLIGHT:</label>
+        <select
+          id="filter-highlight"
+          className="filter-dropdown"
+          value={selectedHighlight}
+          onChange={(e) => onHighlightChange(e.target.value)}
+        >
+          <option value="none">None</option>
+          <option value="missing_poles">🔴 Missing Jam Poles</option>
+          <option value="missing_holders">🟠 Missing Holders</option>
+          <option value="damaged">🟡 Damaged (Bad/Slight Bend)</option>
+          <option value="unavailable">⚫ Unavailable</option>
         </select>
       </div>
 
