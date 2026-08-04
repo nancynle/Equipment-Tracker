@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import type { Equipment, IssueReport, ChangeLogEntry } from '../types';
 import { TrendChart } from './TrendChart';
 import { IssuePanel } from './IssuePanel';
-import { ActivityLog } from './ActivityLog';
 
 interface Props {
   equipment: Equipment[];
@@ -547,10 +546,7 @@ export function Dashboard({ equipment, issues, onUpdateIssue }: Props) {
           <IssuePanel issues={issues} equipment={equipment} onUpdateIssue={onUpdateIssue} />
         </div>
 
-        {/* Activity Log */}
-        <div className="dash-section">
-          <ActivityLog />
-        </div>
+
 
         {/* Quick Links */}
         <div className="dash-section">
