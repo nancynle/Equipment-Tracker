@@ -19,7 +19,7 @@ export default function App() {
   const [username, setUsername] = useState<string>(() => {
     return localStorage.getItem('equipment-tracker-username') || '';
   });
-  const [showUsernamePrompt, setShowUsernamePrompt] = useState(!localStorage.getItem('equipment-tracker-username'));
+  const [showUsernamePrompt, setShowUsernamePrompt] = useState(true);
   const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(null);
   const [showIssueModal, setShowIssueModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
