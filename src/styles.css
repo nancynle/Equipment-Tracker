@@ -1203,6 +1203,36 @@ tr.overdue {
 .activity-by { font-size: 0.65rem; color: var(--text-secondary); }
 .activity-time { font-size: 0.65rem; color: var(--text-secondary); min-width: 45px; text-align: right; }
 
+/* Activity Log Full Page */
+.activity-log-page { padding: 24px; max-width: 900px; margin: 0 auto; }
+.activity-page-header { margin-bottom: 24px; }
+.activity-page-header h2 { font-size: 1.4rem; margin-bottom: 4px; }
+.activity-page-subtitle { color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 16px; }
+.activity-page-filters { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.activity-filter { display: flex; align-items: center; gap: 6px; }
+.activity-filter label { font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); }
+.activity-filter select { padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.8rem; }
+.activity-count { font-size: 0.75rem; color: var(--text-secondary); margin-left: auto; }
+.activity-empty { text-align: center; padding: 60px 20px; color: var(--text-secondary); }
+.activity-empty p { margin: 4px 0; }
+
+.activity-page-timeline { }
+.activity-page-day { margin-bottom: 20px; }
+.activity-page-date { font-size: 0.85rem; font-weight: 700; color: var(--primary); padding: 8px 0; border-bottom: 2px solid var(--primary); margin-bottom: 10px; }
+.activity-page-entries { display: flex; flex-direction: column; gap: 8px; }
+.activity-page-entry { display: flex; gap: 12px; padding: 12px; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+.activity-page-entry-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; color: white; }
+.activity-page-entry-content { flex: 1; min-width: 0; }
+.activity-page-entry-title { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.activity-page-entry-title strong { font-size: 0.85rem; }
+.activity-page-equip { font-size: 0.75rem; background: var(--bg); padding: 2px 8px; border-radius: 4px; font-weight: 600; }
+.activity-page-entry-detail { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 6px; }
+.old-value { text-decoration: line-through; color: #c62828; }
+.new-value { color: #2e7d32; font-weight: 600; }
+.activity-page-entry-meta { display: flex; gap: 12px; font-size: 0.7rem; color: var(--text-secondary); }
+.activity-page-user { font-weight: 600; }
+.activity-page-time { }
+
 /* Stock Level Bars */
 .stock-circles {
   display: flex;

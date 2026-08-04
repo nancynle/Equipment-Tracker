@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { EquipmentTable } from './components/EquipmentTable';
 import { EquipmentMap } from './components/EquipmentMap';
 import { Dashboard } from './components/Dashboard';
+import { ActivityLogPage } from './components/ActivityLogPage';
 import { IssueReportModal } from './components/IssueReportModal';
 import { AddEquipmentModal } from './components/AddEquipmentModal';
 import { StatusBar } from './components/StatusBar';
@@ -9,7 +10,7 @@ import { useSocket } from './hooks/useSocket';
 import { useOffline } from './hooks/useOffline';
 import type { Equipment, IssueReport, SyncStatus } from './types';
 
-type ViewMode = 'table' | 'map' | 'split' | 'dashboard';
+type ViewMode = 'table' | 'map' | 'split' | 'dashboard' | 'activity';
 
 export default function App() {
   const [equipment, setEquipment] = useState<Equipment[]>([]);
@@ -304,6 +305,14 @@ export default function App() {
             >
               ⬛ Split
             </button>
+            <button
+              role="tab"
+              aria-selected={viewMode === 'activity'}
+              className={viewMode === 'activity' ? 'active' : ''}
+              onClick={() => setViewMode('activity')}
+            >
+              📋 Activity
+            </button>
           </div>
           <button className="btn btn-primary" onClick={() => setShowAddModal(true)}>
             + Add Equipment
@@ -328,6 +337,11 @@ export default function App() {
         {viewMode === 'dashboard' && (
           <section className="dashboard-panel">
             <Dashboard equipment={equipment} issues={issues} onUpdateIssue={handleUpdateIssue} />
+          </section>
+        )}
+        {viewMode === 'activity' && (
+          <section className="dashboard-panel">
+            <ActivityLogPage />
           </section>
         )}
         {(viewMode === 'table' || viewMode === 'split') && (
