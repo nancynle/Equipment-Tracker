@@ -83,7 +83,7 @@ io.on('connection', (socket) => {
 
       // Log meaningful changes (not just position moves)
       if (existing) {
-        const fieldsToTrack = ['condition', 'jamPoleQty', 'holder', 'zone', 'location'];
+        const fieldsToTrack = ['condition', 'jamPoleQty', 'holder', 'zone', 'location', 'floorLevel', 'itemArea', 'type', 'identificationNumber', 'lastAuditDate', 'notes', 'mountedOn'];
         for (const field of fieldsToTrack) {
           const oldVal = String((existing as any)[field] || '');
           const newVal = String((equipment as any)[field] || '');
