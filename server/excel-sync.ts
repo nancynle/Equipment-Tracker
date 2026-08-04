@@ -536,69 +536,30 @@ export class ExcelSync {
 
   async addChangeLogEntry(entry: ChangeLogEntry): Promise<void> {
     try {
-      let sheet = this.workbook.getWorksheet('Change Log');
-      if (!sheet) {
-        sheet = this.workbook.addWorksheet('Change Log');
-        sheet.columns = [
-          { header: 'ID', key: 'id', width: 20 },
-          { header: 'Equipment ID', key: 'equipmentId', width: 20 },
-          { header: 'Equipment ID#', key: 'equipmentIdNumber', width: 15 },
-          { header: 'Field', key: 'field', width: 15 },
-          { header: 'Old Value', key: 'oldValue', width: 20 },
-          { header: 'New Value', key: 'newValue', width: 20 },
-          { header: 'Changed By', key: 'changedBy', width: 15 },
-          { header: 'Changed At', key: 'changedAt', width: 25 },
-          { header: 'Change Type', key: 'changeType', width: 18 },
-        ];
-        this.styleHeader(sheet);
+      // Write to a separate JSON file to avoid Excel workbook conflicts
+      const logPath = path.join(path.dirname(this.filePath), 'changelog.json');
+      let entries: ChangeLogEntry[] = [];
+      try {
+        const data = await fs.readFile(logPath, 'utf8');
+        entries = JSON.parse(data);
+      } catch {
+        // File doesn't exist yet
       }
-
-    sheet.addRow({
-      id: entry.id,
-      equipmentId: entry.equipmentId,
-      equipmentIdNumber: entry.equipmentIdNumber,
-      field: entry.field,
-      oldValue: entry.oldValue,
-      newValue: entry.newValue,
-      changedBy: entry.changedBy,
-      changedAt: entry.changedAt,
-      changeType: entry.changeType,
-    });
-
-    await this.save();
-    console.log(`[ChangeLog] Recorded: ${entry.changeType} | ${entry.equipmentIdNumber} | ${entry.field} by ${entry.changedBy}`);
+      entries.push(entry);
+      await fs.writeFile(logPath, JSON.stringify(entries, null, 2));
+      console.log(`[ChangeLog] Recorded: ${entry.changeType} | ${entry.equipmentIdNumber} | ${entry.field} by ${entry.changedBy}`);
     } catch (err) {
       console.error('[ChangeLog] Failed to write entry:', err);
     }
   }
 
   async getChangeLog(): Promise<ChangeLogEntry[]> {
-    let sheet = this.workbook.getWorksheet('Change Log');
-    if (!sheet) return [];
-
-    const columns = [
-      { key: 'id' }, { key: 'equipmentId' }, { key: 'equipmentIdNumber' },
-      { key: 'field' }, { key: 'oldValue' }, { key: 'newValue' },
-      { key: 'changedBy' }, { key: 'changedAt' }, { key: 'changeType' },
-    ];
-    this.reassignColumnKeys(sheet, columns);
-
-    const entries: ChangeLogEntry[] = [];
-    sheet.eachRow((row, rowNumber) => {
-      if (rowNumber === 1) return;
-      entries.push({
-        id: String(row.getCell('id').value || ''),
-        equipmentId: String(row.getCell('equipmentId').value || ''),
-        equipmentIdNumber: String(row.getCell('equipmentIdNumber').value || ''),
-        field: String(row.getCell('field').value || ''),
-        oldValue: String(row.getCell('oldValue').value || ''),
-        newValue: String(row.getCell('newValue').value || ''),
-        changedBy: String(row.getCell('changedBy').value || ''),
-        changedAt: String(row.getCell('changedAt').value || ''),
-        changeType: String(row.getCell('changeType').value || 'edit') as ChangeLogEntry['changeType'],
-      });
-    });
-
-    return entries;
+    try {
+      const logPath = path.join(path.dirname(this.filePath), 'changelog.json');
+      const data = await fs.readFile(logPath, 'utf8');
+      return JSON.parse(data);
+    } catch {
+      return [];
+    }
   }
 }

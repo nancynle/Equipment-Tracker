@@ -76,6 +76,37 @@ apiRouter.put('/equipment/:id', async (req, res) => {
       lastModifiedAt: new Date().toISOString(),
     };
 
+    // Log changes before updating
+    const allEquip = await excelSync.getAllEquipment();
+    const existing = allEquip.find(e => e.id === equipment.id);
+    if (existing) {
+      const fieldsToTrack = ['condition', 'jamPoleQty', 'holder', 'zone', 'location', 'floorLevel', 'itemArea', 'type', 'identificationNumber', 'lastAuditDate', 'notes', 'mountedOn'];
+      for (const field of fieldsToTrack) {
+        let oldVal = String((existing as any)[field] ?? '');
+        let newVal = String((equipment as any)[field] ?? '');
+        if (field === 'holder') {
+          oldVal = (existing as any)[field] ? 'Yes' : 'No';
+          newVal = (equipment as any)[field] ? 'Yes' : 'No';
+        }
+        if (oldVal !== newVal && !(oldVal === '' && newVal === '') && !(oldVal === 'undefined' || newVal === 'undefined')) {
+          let changeType: string = 'edit';
+          if (field === 'condition') changeType = 'condition_change';
+          if (field === 'jamPoleQty') changeType = 'quantity_change';
+          await excelSync.addChangeLogEntry({
+            id: require('crypto').randomUUID(),
+            equipmentId: equipment.id,
+            equipmentIdNumber: equipment.identificationNumber || '',
+            field,
+            oldValue: oldVal,
+            newValue: newVal,
+            changedBy: equipment.lastModifiedBy || 'unknown',
+            changedAt: new Date().toISOString(),
+            changeType: changeType as any,
+          });
+        }
+      }
+    }
+
     await excelSync.updateEquipment(equipment);
     io.emit('equipment:update', equipment);
     res.json(equipment);
