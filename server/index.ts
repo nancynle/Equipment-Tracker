@@ -85,12 +85,17 @@ io.on('connection', (socket) => {
       if (existing) {
         const fieldsToTrack = ['condition', 'jamPoleQty', 'holder', 'zone', 'location', 'floorLevel', 'itemArea', 'type', 'identificationNumber', 'lastAuditDate', 'notes', 'mountedOn'];
         for (const field of fieldsToTrack) {
-          const oldVal = String((existing as any)[field] || '');
-          const newVal = String((equipment as any)[field] || '');
-          if (oldVal !== newVal) {
+          let oldVal = String((existing as any)[field] ?? '');
+          let newVal = String((equipment as any)[field] ?? '');
+          // Normalize booleans for comparison
+          if (field === 'holder') {
+            oldVal = (existing as any)[field] ? 'Yes' : 'No';
+            newVal = (equipment as any)[field] ? 'Yes' : 'No';
+          }
+          if (oldVal !== newVal && !(oldVal === '' && newVal === '') && !(oldVal === 'undefined' || newVal === 'undefined')) {
             let changeType: string = 'edit';
             if (field === 'condition') changeType = 'condition_change';
-            if (field === 'jamPoleQty' || field === 'jamHolder') changeType = 'quantity_change';
+            if (field === 'jamPoleQty') changeType = 'quantity_change';
 
             await excelSync.addChangeLogEntry({
               id: crypto.randomUUID(),

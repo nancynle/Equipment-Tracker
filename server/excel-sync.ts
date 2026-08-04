@@ -535,22 +535,23 @@ export class ExcelSync {
   // --- Change Log ---
 
   async addChangeLogEntry(entry: ChangeLogEntry): Promise<void> {
-    let sheet = this.workbook.getWorksheet('Change Log');
-    if (!sheet) {
-      sheet = this.workbook.addWorksheet('Change Log');
-      sheet.columns = [
-        { header: 'ID', key: 'id', width: 20 },
-        { header: 'Equipment ID', key: 'equipmentId', width: 20 },
-        { header: 'Equipment ID#', key: 'equipmentIdNumber', width: 15 },
-        { header: 'Field', key: 'field', width: 15 },
-        { header: 'Old Value', key: 'oldValue', width: 20 },
-        { header: 'New Value', key: 'newValue', width: 20 },
-        { header: 'Changed By', key: 'changedBy', width: 15 },
-        { header: 'Changed At', key: 'changedAt', width: 25 },
-        { header: 'Change Type', key: 'changeType', width: 18 },
-      ];
-      this.styleHeader(sheet);
-    }
+    try {
+      let sheet = this.workbook.getWorksheet('Change Log');
+      if (!sheet) {
+        sheet = this.workbook.addWorksheet('Change Log');
+        sheet.columns = [
+          { header: 'ID', key: 'id', width: 20 },
+          { header: 'Equipment ID', key: 'equipmentId', width: 20 },
+          { header: 'Equipment ID#', key: 'equipmentIdNumber', width: 15 },
+          { header: 'Field', key: 'field', width: 15 },
+          { header: 'Old Value', key: 'oldValue', width: 20 },
+          { header: 'New Value', key: 'newValue', width: 20 },
+          { header: 'Changed By', key: 'changedBy', width: 15 },
+          { header: 'Changed At', key: 'changedAt', width: 25 },
+          { header: 'Change Type', key: 'changeType', width: 18 },
+        ];
+        this.styleHeader(sheet);
+      }
 
     sheet.addRow({
       id: entry.id,
@@ -565,6 +566,10 @@ export class ExcelSync {
     });
 
     await this.save();
+    console.log(`[ChangeLog] Recorded: ${entry.changeType} | ${entry.equipmentIdNumber} | ${entry.field} by ${entry.changedBy}`);
+    } catch (err) {
+      console.error('[ChangeLog] Failed to write entry:', err);
+    }
   }
 
   async getChangeLog(): Promise<ChangeLogEntry[]> {
