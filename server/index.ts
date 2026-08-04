@@ -67,6 +67,7 @@ io.on('connection', (socket) => {
       pendingChanges: 0,
       connectedUsers: connectedUsers.size,
     });
+    io.emit('users:list', [...connectedUsers.values()].map(u => u.alias));
     console.log(`[WS] User registered: ${user.alias} (${connectedUsers.size} total)`);
   });
 
@@ -229,6 +230,7 @@ io.on('connection', (socket) => {
         pendingChanges: 0,
         connectedUsers: connectedUsers.size,
       });
+      io.emit('users:list', [...connectedUsers.values()].map(u => u.alias));
     }
     console.log(`[WS] Client disconnected: ${socket.id} (${connectedUsers.size} remaining)`);
   });

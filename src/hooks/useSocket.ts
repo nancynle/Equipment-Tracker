@@ -3,6 +3,7 @@ import { io, Socket } from 'socket.io-client';
 
 export function useSocket() {
   const [connected, setConnected] = useState(false);
+  const [connectedUsers, setConnectedUsers] = useState<string[]>([]);
   const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
@@ -16,15 +17,19 @@ export function useSocket() {
 
     socket.on('connect', () => {
       setConnected(true);
-      // Register user - TODO: get from Midway auth
+      const username = localStorage.getItem('equipment-tracker-username') || 'anonymous';
       socket.emit('user:register', {
-        alias: 'current-user',
-        displayName: 'Current User',
+        alias: username,
+        displayName: username,
       });
     });
 
     socket.on('disconnect', () => {
       setConnected(false);
+    });
+
+    socket.on('users:list', (users: string[]) => {
+      setConnectedUsers(users);
     });
 
     socketRef.current = socket;
@@ -34,5 +39,5 @@ export function useSocket() {
     };
   }, []);
 
-  return { socket: socketRef.current, connected };
+  return { socket: socketRef.current, connected, connectedUsers };
 }

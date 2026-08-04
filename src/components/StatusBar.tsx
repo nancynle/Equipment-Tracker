@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import type { SyncStatus } from '../types';
 
 interface Props {
   syncStatus: SyncStatus;
-  connectedUsers: number;
+  connectedUsers: string[];
 }
 
 export function StatusBar({ syncStatus, connectedUsers }: Props) {
+  const [showUsers, setShowUsers] = useState(false);
+
   return (
     <footer className="status-bar" role="status" aria-live="polite">
       <div className="status-left">
@@ -26,9 +28,21 @@ export function StatusBar({ syncStatus, connectedUsers }: Props) {
         )}
       </div>
       <div className="status-right">
-        <span className="users-indicator">
-          👥 {connectedUsers} user{connectedUsers !== 1 ? 's' : ''} connected
+        <span
+          className="users-indicator"
+          onClick={() => setShowUsers(!showUsers)}
+          style={{ cursor: 'pointer' }}
+          title="Click to see who's connected"
+        >
+          👥 {connectedUsers.length} user{connectedUsers.length !== 1 ? 's' : ''} online
         </span>
+        {showUsers && connectedUsers.length > 0 && (
+          <div className="users-popup">
+            {connectedUsers.map((user, i) => (
+              <div key={i} className="users-popup-item">👤 {user}</div>
+            ))}
+          </div>
+        )}
       </div>
     </footer>
   );

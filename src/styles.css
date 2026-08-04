@@ -920,6 +920,26 @@ tr.overdue {
   opacity: 0.8;
 }
 
+.users-popup {
+  position: absolute;
+  bottom: 30px;
+  right: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  min-width: 140px;
+  z-index: 100;
+}
+
+.users-popup-item {
+  padding: 4px 8px;
+  font-size: 0.8rem;
+  color: var(--text);
+  white-space: nowrap;
+}
+
 /* === Modal === */
 .modal-overlay {
   position: fixed;

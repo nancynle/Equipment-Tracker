@@ -32,7 +32,7 @@ export default function App() {
   });
 
   const { isOnline, pendingChanges, queueChange } = useOffline();
-  const { socket, connected } = useSocket();
+  const { socket, connected, connectedUsers } = useSocket();
 
   // Fetch initial data
   useEffect(() => {
@@ -378,7 +378,7 @@ export default function App() {
       {/* Status Bar */}
       <StatusBar
         syncStatus={{ ...syncStatus, isOnline, pendingChanges }}
-        connectedUsers={syncStatus.connectedUsers}
+        connectedUsers={connectedUsers}
       />
 
       {/* Modals */}
