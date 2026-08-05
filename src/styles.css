@@ -312,6 +312,33 @@ body {
   color: var(--text-secondary);
 }
 
+/* Audit Banner */
+.audit-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #fff3e0;
+  border-bottom: 1px solid #ffe0b2;
+  font-size: 0.8rem;
+  color: #e65100;
+}
+
+.audit-banner-icon {
+  font-size: 1.1rem;
+}
+
+.audit-banner-btn {
+  background: none;
+  border: none;
+  color: #1565c0;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 0.8rem;
+  padding: 0;
+}
+
 .table-container {
   flex: 1;
   overflow: auto;

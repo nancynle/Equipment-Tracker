@@ -26,13 +26,37 @@ const CONDITION_COLORS: Record<EquipmentCondition, string> = {
 
 export function EquipmentTable({ equipment, issues, onUpdate, onDelete, onSelect, onReportIssue, highlightedIds, globalSearch }: Props) {
   const [filter, setFilter] = useState<string>('all');
+  const [auditFilter, setAuditFilter] = useState<string>('all');
   const [search, setSearch] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editData, setEditData] = useState<Partial<Equipment>>({});
 
+  // Audit status helpers
+  const getAuditStatus = (item: Equipment): 'overdue' | 'due_soon' | 'ok' | 'never' => {
+    if (!item.lastAuditDate) return 'never';
+    const lastAudit = new Date(item.lastAuditDate);
+    const now = new Date();
+    const daysSince = Math.floor((now.getTime() - lastAudit.getTime()) / (1000 * 60 * 60 * 24));
+    if (daysSince > 30) return 'overdue';
+    if (daysSince > 21) return 'due_soon';
+    return 'ok';
+  };
+
+  // Count items needing audit
+  const overdueCount = equipment.filter(e => getAuditStatus(e) === 'overdue').length;
+  const neverAuditedCount = equipment.filter(e => getAuditStatus(e) === 'never').length;
+  const dueSoonCount = equipment.filter(e => getAuditStatus(e) === 'due_soon').length;
+
   const filtered = equipment
     .filter((item) => {
       if (filter !== 'all' && item.type !== filter) return false;
+      if (auditFilter !== 'all') {
+        const status = getAuditStatus(item);
+        if (auditFilter === 'overdue' && status !== 'overdue') return false;
+        if (auditFilter === 'due_soon' && status !== 'due_soon') return false;
+        if (auditFilter === 'never' && status !== 'never') return false;
+        if (auditFilter === 'needs_attention' && status !== 'overdue' && status !== 'never') return false;
+      }
       if (search) {
         const s = search.toLowerCase();
         return (
@@ -99,8 +123,37 @@ export function EquipmentTable({ equipment, issues, onUpdate, onDelete, onSelect
           <option value="jam_pole">Jam Poles</option>
           <option value="cotterman">Cottermans</option>
         </select>
+        <select
+          value={auditFilter}
+          onChange={(e) => setAuditFilter(e.target.value)}
+          className="filter-select"
+          aria-label="Filter by audit status"
+        >
+          <option value="all">All Audit Status</option>
+          <option value="needs_attention">⚠️ Needs Attention</option>
+          <option value="overdue">🔴 Overdue (30+ days)</option>
+          <option value="due_soon">🟡 Due Soon (21-30 days)</option>
+          <option value="never">⚫ Never Audited</option>
+        </select>
         <span className="item-count">{filtered.length} items</span>
       </div>
+
+      {/* Audit Notification Banner */}
+      {(overdueCount > 0 || neverAuditedCount > 0) && auditFilter === 'all' && (
+        <div className="audit-banner">
+          <span className="audit-banner-icon">🔔</span>
+          <span>
+            {overdueCount > 0 && <strong>{overdueCount} overdue</strong>}
+            {overdueCount > 0 && neverAuditedCount > 0 && ' · '}
+            {neverAuditedCount > 0 && <span>{neverAuditedCount} never audited</span>}
+            {dueSoonCount > 0 && <span> · {dueSoonCount} due soon</span>}
+            {' — '}
+            <button className="audit-banner-btn" onClick={() => setAuditFilter('needs_attention')}>
+              Show all
+            </button>
+          </span>
+        </div>
+      )}
 
       {/* Table */}
       <div className="table-container">
