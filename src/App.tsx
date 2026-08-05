@@ -23,6 +23,7 @@ export default function App() {
   const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(null);
   const [showIssueModal, setShowIssueModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showAuditAlert, setShowAuditAlert] = useState(false);
   const [globalSearch, setGlobalSearch] = useState('');
   const [syncStatus, setSyncStatus] = useState<SyncStatus>({
     isOnline: true,
@@ -400,6 +401,87 @@ export default function App() {
         />
       )}
 
+      {/* Audit Alert */}
+      {showAuditAlert && !showUsernamePrompt && equipment.length > 0 && (() => {
+        const getAuditStatus = (item: Equipment) => {
+          if (!item.lastAuditDate) return 'never';
+          const lastAudit = new Date(item.lastAuditDate);
+          const now = new Date();
+          const daysSince = Math.floor((now.getTime() - lastAudit.getTime()) / (1000 * 60 * 60 * 24));
+          if (daysSince > 14) return 'overdue';
+          if (daysSince > 7) return 'due_soon';
+          return 'ok';
+        };
+        const overdue = equipment.filter(e => getAuditStatus(e) === 'overdue');
+        const dueSoon = equipment.filter(e => getAuditStatus(e) === 'due_soon');
+        const never = equipment.filter(e => getAuditStatus(e) === 'never');
+        const total = overdue.length + dueSoon.length + never.length;
+
+        if (total === 0) return null;
+
+        return (
+          <div className="modal-overlay" onClick={() => setShowAuditAlert(false)}>
+            <div className="modal audit-alert-modal" onClick={(e) => e.stopPropagation()}>
+              <h2>🔔 Audit Status Update</h2>
+              <p className="audit-alert-subtitle">The following equipment needs attention:</p>
+
+              {overdue.length > 0 && (
+                <div className="audit-alert-section">
+                  <h3 className="audit-section-overdue">🔴 Overdue — {overdue.length} items (14+ days)</h3>
+                  <div className="audit-alert-list">
+                    {overdue.slice(0, 10).map(e => (
+                      <div key={e.id} className="audit-alert-item">
+                        <strong>{e.identificationNumber}</strong> — {e.zone} · {e.location}
+                        <span className="audit-alert-date">Last: {e.lastAuditDate}</span>
+                      </div>
+                    ))}
+                    {overdue.length > 10 && <div className="audit-alert-more">+{overdue.length - 10} more</div>}
+                  </div>
+                </div>
+              )}
+
+              {dueSoon.length > 0 && (
+                <div className="audit-alert-section">
+                  <h3 className="audit-section-due">🟡 Due Soon — {dueSoon.length} items (7-14 days)</h3>
+                  <div className="audit-alert-list">
+                    {dueSoon.slice(0, 10).map(e => (
+                      <div key={e.id} className="audit-alert-item">
+                        <strong>{e.identificationNumber}</strong> — {e.zone} · {e.location}
+                        <span className="audit-alert-date">Last: {e.lastAuditDate}</span>
+                      </div>
+                    ))}
+                    {dueSoon.length > 10 && <div className="audit-alert-more">+{dueSoon.length - 10} more</div>}
+                  </div>
+                </div>
+              )}
+
+              {never.length > 0 && (
+                <div className="audit-alert-section">
+                  <h3 className="audit-section-never">⚫ Never Audited — {never.length} items</h3>
+                  <div className="audit-alert-list">
+                    {never.slice(0, 5).map(e => (
+                      <div key={e.id} className="audit-alert-item">
+                        <strong>{e.identificationNumber}</strong> — {e.zone} · {e.location}
+                      </div>
+                    ))}
+                    {never.length > 5 && <div className="audit-alert-more">+{never.length - 5} more</div>}
+                  </div>
+                </div>
+              )}
+
+              <div className="modal-actions">
+                <button className="btn" onClick={() => setShowAuditAlert(false)}>
+                  Dismiss
+                </button>
+                <button className="btn btn-primary" onClick={() => { setShowAuditAlert(false); setViewMode('table'); }}>
+                  Go to Table
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
       {/* Username prompt */}
       {showUsernamePrompt && (
         <div className="modal-overlay" role="dialog" aria-modal="true">
@@ -411,6 +493,8 @@ export default function App() {
               if (username.trim()) {
                 localStorage.setItem('equipment-tracker-username', username.trim());
                 setShowUsernamePrompt(false);
+                // Show audit alert after a short delay to let data load
+                setTimeout(() => setShowAuditAlert(true), 1500);
               }
             }}>
               <input
