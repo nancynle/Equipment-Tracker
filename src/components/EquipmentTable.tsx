@@ -37,8 +37,8 @@ export function EquipmentTable({ equipment, issues, onUpdate, onDelete, onSelect
     const lastAudit = new Date(item.lastAuditDate);
     const now = new Date();
     const daysSince = Math.floor((now.getTime() - lastAudit.getTime()) / (1000 * 60 * 60 * 24));
-    if (daysSince > 30) return 'overdue';
-    if (daysSince > 21) return 'due_soon';
+    if (daysSince > 14) return 'overdue';
+    if (daysSince > 7) return 'due_soon';
     return 'ok';
   };
 
@@ -131,8 +131,8 @@ export function EquipmentTable({ equipment, issues, onUpdate, onDelete, onSelect
         >
           <option value="all">All Audit Status</option>
           <option value="needs_attention">⚠️ Needs Attention</option>
-          <option value="overdue">🔴 Overdue (30+ days)</option>
-          <option value="due_soon">🟡 Due Soon (21-30 days)</option>
+          <option value="overdue">🔴 Overdue (14+ days)</option>
+          <option value="due_soon">🟡 Due Soon (7-14 days)</option>
           <option value="never">⚫ Never Audited</option>
         </select>
         <span className="item-count">{filtered.length} items</span>
