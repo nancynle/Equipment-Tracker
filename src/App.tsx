@@ -327,8 +327,22 @@ export default function App() {
               onChange={handleImport}
             />
           </label>
-          <button className="btn" title="Download Excel file" onClick={() => {
-            window.open('/api/download', '_blank');
+          <button className="btn" title="Download Excel file" onClick={async () => {
+            try {
+              const res = await fetch('/api/download');
+              if (!res.ok) throw new Error('Download failed');
+              const blob = await res.blob();
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = 'equipment-tracker.xlsx';
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+            } catch (err) {
+              alert('❌ Export failed');
+            }
           }}>
             ⬇️ Export
           </button>
