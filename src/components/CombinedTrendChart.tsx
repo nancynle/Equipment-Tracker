@@ -18,7 +18,7 @@ export function CombinedTrendChart({ series, labels, height = 200 }: Props) {
   }
 
   const maxValue = Math.max(...series.flatMap(s => s.data), 1);
-  const width = 300;
+  const width = 600;
   const padding = { top: 15, bottom: 30, left: 25, right: 10 };
   const chartWidth = width - padding.left - padding.right;
   const chartHeight = height - padding.top - padding.bottom;
