@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import type { Equipment, IssueReport, ChangeLogEntry } from '../types';
-import { TrendChart } from './TrendChart';
+import { CombinedTrendChart } from './CombinedTrendChart';
 import { IssuePanel } from './IssuePanel';
 
 interface Props {
@@ -473,93 +473,54 @@ export function Dashboard({ equipment, issues, onUpdateIssue }: Props) {
           ) : (
             <>
             {/* Trend Line Charts */}
-            <div className="trend-charts-grid">
-              <TrendChart
-                title="Issues Reported"
-                color="#f44336"
-                data={(() => {
-                  // Group issues by week/day depending on timeframe
-                  const bucketDays = parseInt(timeframe) <= 30 ? 1 : 7;
-                  const buckets: Record<string, number> = {};
-                  const now = new Date();
-                  for (let i = parseInt(timeframe); i >= 0; i -= bucketDays) {
-                    const d = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
-                    const key = `${d.getMonth() + 1}/${d.getDate()}`;
-                    buckets[key] = 0;
-                  }
-                  recentChanges.filter(c => c.changeType === 'issue_reported').forEach(c => {
+            {/* Combined Trend Chart */}
+            {(() => {
+              const bucketDays = parseInt(timeframe) <= 30 ? 1 : 7;
+              const buckets: string[] = [];
+              const now = new Date();
+              for (let i = parseInt(timeframe); i >= 0; i -= bucketDays) {
+                const d = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+                buckets.push(`${d.getMonth() + 1}/${d.getDate()}`);
+              }
+
+              const buildData = (filter: (c: typeof recentChanges[0]) => boolean) => {
+                const counts: Record<string, number> = {};
+                buckets.forEach(b => counts[b] = 0);
+                recentChanges.filter(filter).forEach(c => {
+                  const d = new Date(c.changedAt);
+                  const key = `${d.getMonth() + 1}/${d.getDate()}`;
+                  if (counts[key] !== undefined) counts[key]++;
+                });
+                return buckets.map(b => counts[b] || 0);
+              };
+
+              const buildStockLoss = () => {
+                const counts: Record<string, number> = {};
+                buckets.forEach(b => counts[b] = 0);
+                recentChanges.filter(c => c.changeType === 'quantity_change').forEach(c => {
+                  const oldQty = Number(c.oldValue) || 0;
+                  const newQty = Number(c.newValue) || 0;
+                  if (newQty < oldQty) {
                     const d = new Date(c.changedAt);
                     const key = `${d.getMonth() + 1}/${d.getDate()}`;
-                    if (buckets[key] !== undefined) buckets[key]++;
-                  });
-                  return Object.entries(buckets).map(([label, value]) => ({ label, value }));
-                })()}
-              />
-              <TrendChart
-                title="Condition Changes"
-                color="#ff9800"
-                data={(() => {
-                  const bucketDays = parseInt(timeframe) <= 30 ? 1 : 7;
-                  const buckets: Record<string, number> = {};
-                  const now = new Date();
-                  for (let i = parseInt(timeframe); i >= 0; i -= bucketDays) {
-                    const d = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
-                    const key = `${d.getMonth() + 1}/${d.getDate()}`;
-                    buckets[key] = 0;
+                    if (counts[key] !== undefined) counts[key] += (oldQty - newQty);
                   }
-                  recentChanges.filter(c => c.changeType === 'condition_change').forEach(c => {
-                    const d = new Date(c.changedAt);
-                    const key = `${d.getMonth() + 1}/${d.getDate()}`;
-                    if (buckets[key] !== undefined) buckets[key]++;
-                  });
-                  return Object.entries(buckets).map(([label, value]) => ({ label, value }));
-                })()}
-              />
-              <TrendChart
-                title="All Activity"
-                color="#2196f3"
-                data={(() => {
-                  const bucketDays = parseInt(timeframe) <= 30 ? 1 : 7;
-                  const buckets: Record<string, number> = {};
-                  const now = new Date();
-                  for (let i = parseInt(timeframe); i >= 0; i -= bucketDays) {
-                    const d = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
-                    const key = `${d.getMonth() + 1}/${d.getDate()}`;
-                    buckets[key] = 0;
-                  }
-                  recentChanges.forEach(c => {
-                    const d = new Date(c.changedAt);
-                    const key = `${d.getMonth() + 1}/${d.getDate()}`;
-                    if (buckets[key] !== undefined) buckets[key]++;
-                  });
-                  return Object.entries(buckets).map(([label, value]) => ({ label, value }));
-                })()}
-              />
-              <TrendChart
-                title="Stock Loss (Poles Removed)"
-                color="#f44336"
-                data={(() => {
-                  const bucketDays = parseInt(timeframe) <= 30 ? 1 : 7;
-                  const buckets: Record<string, number> = {};
-                  const now = new Date();
-                  for (let i = parseInt(timeframe); i >= 0; i -= bucketDays) {
-                    const d = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
-                    const key = `${d.getMonth() + 1}/${d.getDate()}`;
-                    buckets[key] = 0;
-                  }
-                  recentChanges.filter(c => c.changeType === 'quantity_change').forEach(c => {
-                    const oldQty = Number(c.oldValue) || 0;
-                    const newQty = Number(c.newValue) || 0;
-                    if (newQty < oldQty) {
-                      const d = new Date(c.changedAt);
-                      const key = `${d.getMonth() + 1}/${d.getDate()}`;
-                      if (buckets[key] !== undefined) buckets[key] += (oldQty - newQty);
-                    }
-                  });
-                  return Object.entries(buckets).map(([label, value]) => ({ label, value }));
-                })()}
-              />
-            </div>
+                });
+                return buckets.map(b => counts[b] || 0);
+              };
+
+              return (
+                <CombinedTrendChart
+                  labels={buckets}
+                  series={[
+                    { label: 'Issues Reported', color: '#f44336', data: buildData(c => c.changeType === 'issue_reported') },
+                    { label: 'Condition Changes', color: '#ff9800', data: buildData(c => c.changeType === 'condition_change') },
+                    { label: 'Stock Loss', color: '#9c27b0', data: buildStockLoss() },
+                    { label: 'All Activity', color: '#2196f3', data: buildData(() => true) },
+                  ]}
+                />
+              );
+            })()}
 
             <div className="insights-grid">
               <div className="insight-card">
