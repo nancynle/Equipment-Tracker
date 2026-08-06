@@ -327,9 +327,11 @@ export default function App() {
               onChange={handleImport}
             />
           </label>
-          <a href="/api/download" className="btn" download title="Download Excel file">
+          <button className="btn" title="Download Excel file" onClick={() => {
+            window.open('/api/download', '_blank');
+          }}>
             ⬇️ Export
-          </a>
+          </button>
         </div>
       </header>
 

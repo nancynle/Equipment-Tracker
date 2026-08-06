@@ -45,7 +45,7 @@ export function AddEquipmentModal({ equipment, username, onSubmit, onClose }: Pr
       mountedOn: mountedOn || undefined,
       lastModifiedBy: username || 'unknown',
       mapX: 50,
-      mapY: 50,
+      mapY: 5,
     };
 
     onSubmit(newEquipment);

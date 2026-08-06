@@ -266,7 +266,7 @@ export class ExcelSync {
           mountedOn: item.mountedOn,
           lastModifiedBy: 'import',
           mapX: 50,
-          mapY: 50,
+          mapY: 5,
         };
 
         // Restore saved position if this item was previously positioned
