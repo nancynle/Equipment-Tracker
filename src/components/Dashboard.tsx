@@ -275,41 +275,13 @@ export function Dashboard({ equipment, issues, onUpdateIssue }: Props) {
 
         {/* Stock Problem Areas by Zone */}
         <div className="dash-section dash-section-wide">
-          <h3>📉 Problem Areas — Jam Pole Stock by Zone</h3>
-          <p className="dash-subtitle">Zones ranked by stock deficit (lowest percentage first)</p>
-          <div className="problem-areas">
-            <table className="problem-table">
-              <thead>
-                <tr>
-                  <th>Zone</th>
-                  <th>Holders</th>
-                  <th>Stocked</th>
-                  <th>Empty</th>
-                  <th>Stock %</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {locationStock.map(({ location, holderCount, stocked, percent }) => (
-                  <tr key={location} className={percent < 50 ? 'problem-row-critical' : percent < 75 ? 'problem-row-warning' : ''}>
-                    <td><strong>{location}</strong></td>
-                    <td>{holderCount}</td>
-                    <td>{stocked}</td>
-                    <td>{holderCount - stocked}</td>
-                    <td><strong>{percent}%</strong></td>
-                    <td>
-                      {percent === 100 ? '✅ Full' : percent >= 75 ? '🟡 OK' : percent >= 50 ? '🟠 Low' : '🔴 Critical'}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <h3>📉 Stock Loss by Zone</h3>
+          <p className="dash-subtitle">Zones ranked by how many jam poles have been lost (from activity log)</p>
 
           {/* Quantity changes over time per zone from changelog */}
           {changelog.length > 0 && (() => {
             const qtyChanges = changelog.filter(c => c.changeType === 'quantity_change');
-            if (qtyChanges.length === 0) return null;
+            if (qtyChanges.length === 0) return <p className="dash-empty">No quantity changes recorded yet. Data will appear as stock levels change over time.</p>;
 
             // Group quantity decreases by zone
             const zoneDecreases: Record<string, number> = {};
@@ -324,22 +296,19 @@ export function Dashboard({ equipment, issues, onUpdateIssue }: Props) {
             });
 
             const sorted = Object.entries(zoneDecreases).sort(([,a], [,b]) => b - a);
-            if (sorted.length === 0) return null;
+            if (sorted.length === 0) return <p className="dash-empty">No stock losses recorded yet.</p>;
 
             return (
-              <div className="problem-trends">
-                <h4>📊 Zones with Most Stock Losses (from activity log)</h4>
-                <div className="problem-trend-list">
-                  {sorted.map(([zone, lost]) => (
-                    <div key={zone} className="problem-trend-item">
-                      <span className="problem-trend-zone">{zone}</span>
-                      <div className="problem-trend-bar-wrap">
-                        <div className="problem-trend-bar" style={{ width: `${Math.min(100, (lost / sorted[0][1]) * 100)}%` }}></div>
-                      </div>
-                      <span className="problem-trend-count">-{lost} poles</span>
+              <div className="problem-trend-list">
+                {sorted.map(([zone, lost]) => (
+                  <div key={zone} className="problem-trend-item">
+                    <span className="problem-trend-zone">{zone}</span>
+                    <div className="problem-trend-bar-wrap">
+                      <div className="problem-trend-bar" style={{ width: `${Math.min(100, (lost / sorted[0][1]) * 100)}%` }}></div>
                     </div>
-                  ))}
-                </div>
+                    <span className="problem-trend-count">-{lost} poles</span>
+                  </div>
+                ))}
               </div>
             );
           })()}
