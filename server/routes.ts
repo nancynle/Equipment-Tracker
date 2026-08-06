@@ -303,11 +303,59 @@ apiRouter.post('/versions/:filename/restore', async (req, res) => {
   }
 });
 
-// GET /api/download - download current Excel file
-apiRouter.get('/download', (req, res) => {
-  const excelSync: ExcelSync = req.app.locals.excelSync;
-  const filePath = (excelSync as any).filePath;
-  res.download(filePath, 'equipment-tracker.xlsx');
+// GET /api/download - export clean Excel with table data only
+apiRouter.get('/download', async (req, res) => {
+  try {
+    const excelSync: ExcelSync = req.app.locals.excelSync;
+    const equipment = await excelSync.getAllEquipment();
+    
+    const ExcelJS = require('exceljs');
+    const wb = new ExcelJS.Workbook();
+    const sheet = wb.addWorksheet('Equipment Data');
+    
+    sheet.columns = [
+      { header: 'Zone', key: 'zone', width: 15 },
+      { header: 'Location', key: 'location', width: 20 },
+      { header: 'Floor Level', key: 'floorLevel', width: 12 },
+      { header: 'Item Area', key: 'itemArea', width: 15 },
+      { header: 'Equipment Type', key: 'type', width: 15 },
+      { header: 'ID #', key: 'identificationNumber', width: 15 },
+      { header: 'Jam Pole Qty', key: 'jamPoleQty', width: 12 },
+      { header: 'Holder', key: 'holder', width: 8 },
+      { header: 'Condition', key: 'condition', width: 12 },
+      { header: 'Last Audit Date', key: 'lastAuditDate', width: 15 },
+      { header: 'Notes', key: 'notes', width: 30 },
+    ];
+
+    // Style header
+    const headerRow = sheet.getRow(1);
+    headerRow.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+    headerRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF232F3E' } };
+
+    for (const item of equipment) {
+      sheet.addRow({
+        zone: item.zone,
+        location: item.location,
+        floorLevel: item.floorLevel,
+        itemArea: item.itemArea,
+        type: item.type === 'jam_pole' ? 'Jam Pole' : 'Cotterman',
+        identificationNumber: item.identificationNumber,
+        jamPoleQty: item.jamPoleQty,
+        holder: item.holder ? 'Yes' : 'No',
+        condition: item.condition,
+        lastAuditDate: item.lastAuditDate,
+        notes: item.notes || '',
+      });
+    }
+
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', 'attachment; filename=equipment-tracker.xlsx');
+    await wb.xlsx.write(res);
+    res.end();
+  } catch (err) {
+    console.error('[API] Error exporting:', err);
+    res.status(500).json({ error: 'Failed to export' });
+  }
 });
 
 // POST /api/upload-floorplan - upload building floor plan image
