@@ -1380,6 +1380,23 @@ tr.overdue {
   border-radius: 50%;
 }
 
+/* Problem Areas Table */
+.problem-areas { margin-bottom: 16px; overflow-x: auto; }
+.problem-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+.problem-table th { background: var(--primary); color: white; padding: 8px 10px; text-align: left; font-size: 0.75rem; }
+.problem-table td { padding: 6px 10px; border-bottom: 1px solid var(--border); }
+.problem-row-critical { background: #ffebee; }
+.problem-row-warning { background: #fff8e1; }
+
+.problem-trends { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border); }
+.problem-trends h4 { font-size: 0.85rem; margin-bottom: 10px; }
+.problem-trend-list { display: flex; flex-direction: column; gap: 6px; }
+.problem-trend-item { display: flex; align-items: center; gap: 10px; }
+.problem-trend-zone { font-size: 0.8rem; font-weight: 600; min-width: 120px; }
+.problem-trend-bar-wrap { flex: 1; height: 14px; background: #eee; border-radius: 7px; overflow: hidden; }
+.problem-trend-bar { height: 100%; background: #f44336; border-radius: 7px; transition: width 0.3s; }
+.problem-trend-count { font-size: 0.75rem; font-weight: 700; color: #c62828; min-width: 60px; text-align: right; }
+
 /* Cotterman Compliance */
 .dash-subtitle {
   font-size: 0.75rem;

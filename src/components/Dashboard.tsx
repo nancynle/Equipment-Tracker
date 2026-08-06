@@ -273,6 +273,78 @@ export function Dashboard({ equipment, issues, onUpdateIssue }: Props) {
           </div>
         </div>
 
+        {/* Stock Problem Areas by Zone */}
+        <div className="dash-section dash-section-wide">
+          <h3>📉 Problem Areas — Jam Pole Stock by Zone</h3>
+          <p className="dash-subtitle">Zones ranked by stock deficit (lowest percentage first)</p>
+          <div className="problem-areas">
+            <table className="problem-table">
+              <thead>
+                <tr>
+                  <th>Zone</th>
+                  <th>Holders</th>
+                  <th>Stocked</th>
+                  <th>Empty</th>
+                  <th>Stock %</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {locationStock.map(({ location, holderCount, stocked, percent }) => (
+                  <tr key={location} className={percent < 50 ? 'problem-row-critical' : percent < 75 ? 'problem-row-warning' : ''}>
+                    <td><strong>{location}</strong></td>
+                    <td>{holderCount}</td>
+                    <td>{stocked}</td>
+                    <td>{holderCount - stocked}</td>
+                    <td><strong>{percent}%</strong></td>
+                    <td>
+                      {percent === 100 ? '✅ Full' : percent >= 75 ? '🟡 OK' : percent >= 50 ? '🟠 Low' : '🔴 Critical'}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Quantity changes over time per zone from changelog */}
+          {changelog.length > 0 && (() => {
+            const qtyChanges = changelog.filter(c => c.changeType === 'quantity_change');
+            if (qtyChanges.length === 0) return null;
+
+            // Group quantity decreases by zone
+            const zoneDecreases: Record<string, number> = {};
+            qtyChanges.forEach(c => {
+              const oldQty = Number(c.oldValue) || 0;
+              const newQty = Number(c.newValue) || 0;
+              if (newQty < oldQty) {
+                const eq = equipment.find(e => e.id === c.equipmentId);
+                const zone = eq?.zone || 'Unknown';
+                zoneDecreases[zone] = (zoneDecreases[zone] || 0) + (oldQty - newQty);
+              }
+            });
+
+            const sorted = Object.entries(zoneDecreases).sort(([,a], [,b]) => b - a);
+            if (sorted.length === 0) return null;
+
+            return (
+              <div className="problem-trends">
+                <h4>📊 Zones with Most Stock Losses (from activity log)</h4>
+                <div className="problem-trend-list">
+                  {sorted.map(([zone, lost]) => (
+                    <div key={zone} className="problem-trend-item">
+                      <span className="problem-trend-zone">{zone}</span>
+                      <div className="problem-trend-bar-wrap">
+                        <div className="problem-trend-bar" style={{ width: `${Math.min(100, (lost / sorted[0][1]) * 100)}%` }}></div>
+                      </div>
+                      <span className="problem-trend-count">-{lost} poles</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
+        </div>
+
         {/* Cotterman Holder Compliance */}
         <div className="dash-section">
           <h3>🪜 Cotterman Holder Compliance</h3>
