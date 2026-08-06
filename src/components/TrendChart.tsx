@@ -23,7 +23,7 @@ export function TrendChart({ data, title, color = '#2196f3', height = 150 }: Pro
   }
 
   const maxValue = Math.max(...data.map(d => d.value), 1);
-  const width = 100;
+  const width = 200;
   const padding = { top: 10, bottom: 30, left: 5, right: 5 };
   const chartWidth = width - padding.left - padding.right;
   const chartHeight = height - padding.top - padding.bottom;
@@ -46,7 +46,7 @@ export function TrendChart({ data, title, color = '#2196f3', height = 150 }: Pro
       <svg
         viewBox={`0 0 ${width} ${height}`}
         className="trend-svg"
-        preserveAspectRatio="none"
+        preserveAspectRatio="xMidYMid meet"
       >
         {/* Grid lines */}
         {[0, 0.25, 0.5, 0.75, 1].map((pct) => (
