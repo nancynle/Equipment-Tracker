@@ -24,7 +24,7 @@ export function TrendChart({ data, title, color = '#2196f3', height = 150 }: Pro
 
   const maxValue = Math.max(...data.map(d => d.value), 1);
   const width = 100;
-  const padding = { top: 10, bottom: 25, left: 5, right: 5 };
+  const padding = { top: 10, bottom: 30, left: 5, right: 5 };
   const chartWidth = width - padding.left - padding.right;
   const chartHeight = height - padding.top - padding.bottom;
 
@@ -74,18 +74,19 @@ export function TrendChart({ data, title, color = '#2196f3', height = 150 }: Pro
 
         {/* X-axis labels */}
         {data.map((d, i) => {
-          // Only show every nth label to avoid crowding
-          const showEvery = Math.max(1, Math.floor(data.length / 6));
+          // Show fewer labels to prevent crowding
+          const showEvery = Math.max(1, Math.floor(data.length / 4));
           if (i % showEvery !== 0 && i !== data.length - 1) return null;
           const x = padding.left + (i / Math.max(data.length - 1, 1)) * chartWidth;
           return (
             <text
               key={i}
               x={x}
-              y={height - 3}
+              y={height - 2}
               textAnchor="middle"
-              fontSize="3.5"
-              fill="#666"
+              fontSize="5"
+              fill="#333"
+              fontWeight="500"
             >
               {d.label}
             </text>
